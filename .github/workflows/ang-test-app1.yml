@@ -54,7 +54,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: node-app
-
+      - branch-name: ${{Build.BranchName}}
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
