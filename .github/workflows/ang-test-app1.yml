@@ -55,10 +55,9 @@ jobs:
         with:
           name: node-app
       - name: Branch name
-        run: echo 'The branch name is' $BRANCH_NAME  
+        run: echo 'The branch name is' ${{ steps.branch-name }} 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
-        id: deploy-to-webapp
         with:
           app-name: 'new-angapp'
           slot-name: 'Production'
