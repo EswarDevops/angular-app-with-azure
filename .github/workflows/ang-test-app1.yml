@@ -35,7 +35,9 @@ jobs:
         run: |
           npm install
           npm run build
-  
+      - name: Branch name
+        run: |
+          echo "Current Branch: ${{ steps.branch-name.outputs.current_branch }}"
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
@@ -54,9 +56,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: node-app
-      - name: Branch name
-        run: |
-          echo "Current Branch: ${{ steps.branch-name.outputs.current_branch }}"
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         with:
