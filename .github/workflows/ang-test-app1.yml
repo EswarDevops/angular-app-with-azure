@@ -55,8 +55,7 @@ jobs:
         with:
           name: node-app
       - name: Branch name
-        run: | echo "The branch name is: ${{ steps.branch-name }}"
-        exit 1
+        run: echo The branch name is- ${{ steps.branch-name }}
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         with:
