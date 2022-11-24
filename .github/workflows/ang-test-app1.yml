@@ -7,7 +7,7 @@ name: Build and deploy Node.js app to Azure Web App - new-angapp
 on:
   push:
     branches:
-      - '/master/'
+      - master
       - '40_stages/DEV/**'
       - '40_stages/QA/**'
   workflow_dispatch:
