@@ -7,10 +7,9 @@ name: Build and deploy Node.js app to Azure Web App - new-angapp
 on:
   push:
     branches:
-      - main
-      - DEV
-      - QA
-      - PROD
+      - master
+      - '40_stages/DEV/**'
+      - '40_stages/QA/**'
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -35,7 +34,6 @@ jobs:
         run: |
           npm install
           npm run build
-  
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
@@ -54,10 +52,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: node-app
-
+      # - name: Branch name
+      #   run: |
+      #     echo "Source Branch: ${{ Build.sourceBranch }}"
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
-        id: deploy-to-webapp
         with:
           app-name: 'new-angapp'
           slot-name: 'Production'
