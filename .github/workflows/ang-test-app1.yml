@@ -24,7 +24,8 @@ jobs:
       
       #check out the right version and branch that is associated with the GitHub push or pull request.
       - uses: actions/checkout@v2
-
+      - name: Branch name
+        run: echo running on branch ${GITHUB_REF##*/}
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
@@ -52,8 +53,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: node-app
-      - name: Branch name
-        run: echo running on branch ${GITHUB_REF##*/}
+      # - name: Branch name
+      #   run: echo running on branch ${GITHUB_REF##*/}
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         with:
