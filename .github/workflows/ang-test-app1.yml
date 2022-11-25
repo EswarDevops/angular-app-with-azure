@@ -54,7 +54,7 @@ jobs:
           name: node-app
       - name: Branch name
         run: |
-          echo "Source Branch: ${{ github.ref }}"
+          echo "Source Branch: ${{ github.branch }}"
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         with:
