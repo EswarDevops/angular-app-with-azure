@@ -54,7 +54,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: node-app
-      - name: echo "URL is: ${{ steps.deploy-to-webapp.outputs.webapp-url }}"
+      - name: BranchName
         run: |
           echo "Source Branch: ${{ github.ref_name }}"
       - name: 'Deploy to Azure Web App'
