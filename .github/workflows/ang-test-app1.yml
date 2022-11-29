@@ -55,6 +55,7 @@ jobs:
       - name: Branch name
         run: |
           echo "Source Branch: ${{ github.ref_name }}"
+          echo "URL is: ${{ steps.deploy-to-webapp.outputs.webapp-url }}"
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         with:
