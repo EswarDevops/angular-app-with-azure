@@ -41,10 +41,11 @@ jobs:
 
   deploy:
     if: ${{ startsWith( github.ref_name, '40_stages/DEV') }}
+    name: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Prod'
+      name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
