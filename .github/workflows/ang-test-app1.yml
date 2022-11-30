@@ -46,8 +46,6 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      run: |
-          echo "URL is: ${{ steps.deploy-to-webapp.outputs.webapp-url }}"
 
     steps:
       - name: Download artifact from build job
@@ -56,7 +54,7 @@ jobs:
           name: node-app
       - name: BranchName
         run: |
-          echo "Source Branch: ${{ github.ref_name }}"
+          echo "Source Branch: ${{ github }}"
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         with:
