@@ -66,5 +66,5 @@ jobs:
         with:
           app-name: 'new-angapp'
           slot-name: 'Production'
-          publish-profile: ${{ env.PUBLISHPROFILE }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           package: .
