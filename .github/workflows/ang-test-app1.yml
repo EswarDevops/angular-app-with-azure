@@ -41,12 +41,15 @@ jobs:
 
   deploy:
     if: ${{ startsWith( github.ref_name, '40_stages/DEV') }}
-    name: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     runs-on: ubuntu-latest
     needs: build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      scripts:
+      - name: Webapp Output url is
+        script: | 
+          echo "URL is: ${{ steps.deploy-to-webapp.outputs.webapp-url }}"
 
     steps:
       - name: Download artifact from build job
