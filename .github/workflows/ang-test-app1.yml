@@ -39,7 +39,7 @@ jobs:
           name: node-app
           path: ./dist/angular-app-with-azure
 
-  deployMaster:
+  deploy:
     if: ${{ startsWith( github.ref_name, 'master') }} 
     runs-on: ubuntu-latest
     needs: build
@@ -63,7 +63,7 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           package: .
-  deployDEV:
+  deploy:
     if: ${{ startsWith( github.ref_name, '40_stages/DEV') }}
     runs-on: ubuntu-latest
     needs: build
@@ -85,7 +85,7 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}
           package: .
-  deployQA:
+  deploy:
       if: ${{ startsWith( github.ref_name, '40_stages/QA') }}
       runs-on: ubuntu-latest
       needs: build
