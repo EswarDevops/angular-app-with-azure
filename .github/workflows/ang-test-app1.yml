@@ -12,6 +12,10 @@ on:
       - '40_stages/QA/**'
   workflow_dispatch:
 
+env:
+  PUBLISHPROFILE: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+  APP_NAME: "new-angapp"
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
@@ -46,14 +50,16 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
-      - name: Set env vars (dev)
-        if:  ${{ startsWith( github.ref_name, '40_stages/DEV') }}
-        run: |
-          echo "PUBLISHPROFILE=${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}" >> $GITHUB_ENV
-      - name: Set env vars (prod)
-        if: ${{ startsWith( github.ref_name, 'master') }}
-        run: |
-          echo "PUBLISHPROFILE=${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}" >> $GITHUB_ENV
+      # - name: Set env vars (dev)
+      #   run: |
+      #   if:  ${{ startsWith( github.ref_name, '40_stages/DEV') }}
+      #   env:
+      #     PUBLISHPROFILE:  ${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}
+      #   echo "PUBLISHPROFILE=${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}" >> $GITHUB_ENV
+      # - name: Set env vars (prod)
+      #   if: ${{ startsWith( github.ref_name, 'master') }}
+      #   run: |
+      #     echo "PUBLISHPROFILE=${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}" >> $GITHUB_ENV
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
@@ -63,8 +69,12 @@ jobs:
           echo "Source Branch: ${{ github.ref_name }}"
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
+        if:  ${{ startsWith( github.ref_name, '40_stages/DEV') }}
+        env:
+          PUBLISHPROFILE:  ${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}
+          APP_NAME: "new-angapp-stageDev"
         with:
-          app-name: 'new-angapp'
+          app-name: ${{ env.APP_NAME }}
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          publish-profile: ${{ env.PUBLISHPROFILE }}
           package: .
