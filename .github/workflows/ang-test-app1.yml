@@ -52,7 +52,9 @@ jobs:
       - name: Set env vars (dev)
         if:  ${{ startsWith( github.ref_name, '40_stages/DEV') }}
         run: |
-          echo "PUBLISHPROFILE=${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}" >> $GITHUB_ENV
+        env:
+          PUBLISHPROFILE:  ${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}
+      #   echo "PUBLISHPROFILE=${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}" >> $GITHUB_ENV
       # - name: Set env vars (prod)
       #   if: ${{ startsWith( github.ref_name, 'master') }}
       #   run: |
