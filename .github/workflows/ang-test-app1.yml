@@ -12,6 +12,8 @@ on:
       - '40_stages/QA/**'
   workflow_dispatch:
 
+env:
+  PUBLISHPROFILE: ${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
@@ -46,14 +48,14 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
-      - name: Set env vars (dev)
-        if:  ${{ startsWith( github.ref_name, '40_stages/DEV') }}
-        run: |
-          echo "PUBLISHPROFILE:${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}" >> $GITHUB_ENV
-      - name: Set env vars (prod)
-        if: ${{ startsWith( github.ref_name, 'master') }}
-        run: |
-          echo "PUBLISHPROFILE:${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}" >> $GITHUB_ENV
+      # - name: Set env vars (dev)
+      #   if:  ${{ startsWith( github.ref_name, '40_stages/DEV') }}
+      #   run: |
+      #     echo "PUBLISHPROFILE= ${ { secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}" >> $GITHUB_ENV
+      # - name: Set env vars (prod)
+      #   if: ${{ startsWith( github.ref_name, 'master') }}
+      #   run: |
+      #     echo "PUBLISHPROFILE=${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}" >> $GITHUB_ENV
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
@@ -66,5 +68,5 @@ jobs:
         with:
           app-name: 'new-angapp-stageDev'
           slot-name: 'Production'
-          publish-profile: ${{env.PUBLISHPROFILE}}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}
           package: .
