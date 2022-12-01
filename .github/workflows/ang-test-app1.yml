@@ -53,7 +53,7 @@ jobs:
       - name: BranchName
         run: |
           echo "Source Branch: ${{ github.ref_name }}"
-      - name: 'Deploy to Azure Web App'
+      - name: 'Deploy to Dev'
         uses: azure/webapps-deploy@v2
         if:  ${{ startsWith( github.ref_name, '40_stages/DEV') }}
         env:
@@ -64,6 +64,8 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ env.PUBLISHPROFILE }}
           package: .
+      - name: 'Deploy to master'
+        uses: azure/webapps-deploy@v2
         if:  ${{ startsWith( github.ref_name, 'master') }}
         env:
           PUBLISHPROFILE:  ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
