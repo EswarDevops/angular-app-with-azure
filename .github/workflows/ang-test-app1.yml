@@ -54,7 +54,7 @@ jobs:
         run: |
         env:
           PUBLISHPROFILE:  ${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}
-        #   echo "PUBLISHPROFILE=${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}" >> $GITHUB_ENV
+      #   echo "PUBLISHPROFILE=${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}" >> $GITHUB_ENV
       # - name: Set env vars (prod)
       #   if: ${{ startsWith( github.ref_name, 'master') }}
       #   run: |
