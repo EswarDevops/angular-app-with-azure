@@ -55,17 +55,17 @@ jobs:
           echo "Source Branch: ${{ github.ref_name }}"
 
       - name: 'Deploy to Dev'
-        uses: "./.github/workflows/appdev.yml"
-        # uses: azure/webapps-deploy@v2
-        # if:  ${{ startsWith( github.ref_name, '40_stages/DEV') }}
-        # env:
-        #   PUBLISHPROFILE:  ${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}
-        #   APP_NAME: "new-angapp-stageDev"
-        # with:
-        #   app-name: ${{ env.APP_NAME }}
-        #   slot-name: 'Production'
-        #   publish-profile: ${{ env.PUBLISHPROFILE }}
-        #   package: .
+        # uses: "./.github/workflows/appdev.yml"
+        uses: azure/webapps-deploy@v2
+        if:  ${{ startsWith( github.ref_name, '40_stages/DEV') }}
+        env:
+          PUBLISHPROFILE:  ${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}
+          APP_NAME: "new-angapp-stageDev"
+        with:
+          app-name: ${{ env.APP_NAME }}
+          slot-name: 'Production'
+          publish-profile: ${{ env.PUBLISHPROFILE }}
+          package: .
 
       - name: 'Deploy to QA'
         uses: azure/webapps-deploy@v2
