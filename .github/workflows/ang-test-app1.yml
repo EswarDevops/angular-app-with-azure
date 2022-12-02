@@ -64,6 +64,7 @@ jobs:
           slot_name: ""
         with:
           app-name: ${{ env.APP_NAME }}
+          slot-name: 'staging'
           publish-profile: ${{ env.PUBLISHPROFILE }}
           package: .
 
