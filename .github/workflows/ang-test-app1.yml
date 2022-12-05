@@ -7,7 +7,9 @@ name: Build and deploy Node.js app to Azure Web App - new-angapp
 on:
   push:
     branches:
-      - main
+      - master
+      - '40_stages/DEV/**'
+      - '40_stages/QA/**'
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -22,7 +24,6 @@ jobs:
       
       #check out the right version and branch that is associated with the GitHub push or pull request.
       - uses: actions/checkout@v2
-
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
@@ -32,7 +33,6 @@ jobs:
         run: |
           npm install
           npm run build
-  
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
@@ -45,18 +45,60 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
           name: node-app
+      - name: BranchName
+        run: |
+          echo "Source Branch: ${{ github.ref_name }}"
 
-      - name: 'Deploy to Azure Web App'
+      - name: 'Deploy to Dev'
         uses: azure/webapps-deploy@v2
-        id: deploy-to-webapp
+        if:  ${{ startsWith( github.ref_name, '40_stages/DEV') }}
+        env:
+          PUBLISHPROFILE:  ${{ secrets.AZUREAPPSERVICE_DEV_PUBLISHPROFILE }}
+          APP_NAME: "new-angapp-stageDev"
+          slot_name: ""
         with:
-          app-name: 'new-angapp'
+          app-name: ${{ env.APP_NAME }}
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          publish-profile: ${{ env.PUBLISHPROFILE }}
+          package: .
+
+      - name: 'Deploy to QA'
+        uses: azure/webapps-deploy@v2
+        if:  ${{ startsWith( github.ref_name, '40_stages/QA') }}
+        env:
+          PUBLISHPROFILE:  ${{ secrets.AZUREAPPSERVICE_QA_PUBLISHPROFILE }}
+          APP_NAME: "new-angapp-stageQA"
+        with:
+          app-name: ${{ env.APP_NAME }}
+          slot-name: 'Production'
+          publish-profile: ${{ env.PUBLISHPROFILE }}
+          package: .
+
+      - name: 'Deploy to MT'
+        uses: azure/webapps-deploy@v2
+        if:  ${{ startsWith( github.ref_name, '40_stages/MT') }}
+        env:
+          PUBLISHPROFILE:  ${{ secrets.AZUREAPPSERVICE_MT_PUBLISHPROFILE }}
+          APP_NAME: "new-angapp-stageMT"
+        with:
+          app-name: ${{ env.APP_NAME }}
+          slot-name: 'Production'
+          publish-profile: ${{ env.PUBLISHPROFILE }}
+          package: .        
+
+      - name: 'Deploy to master'
+        uses: azure/webapps-deploy@v2
+        if:  ${{ startsWith( github.ref_name, 'master') }}
+        env:
+          PUBLISHPROFILE:  ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          APP_NAME: "new-angapp"
+        with:
+          app-name: ${{ env.APP_NAME }}
+          slot-name: 'Production'
+          publish-profile: ${{ env.PUBLISHPROFILE }}
           package: .
